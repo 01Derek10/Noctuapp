@@ -1,9 +1,7 @@
 package com.example.noctuapp.login
 
 
-import android.annotation.SuppressLint
 import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -54,9 +52,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.core.app.ComponentActivity
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.R
 import com.example.noctuapp.elements.TransparentTextField
@@ -64,7 +60,6 @@ import com.example.noctuapp.ui.theme.NoctuappTheme
 import kotlinx.coroutines.launch
 
 
-@SuppressLint("RestrictedApi")
 @Composable
 fun VistaLogin(navController: NavController) {
 
@@ -74,18 +69,11 @@ fun VistaLogin(navController: NavController) {
     var datosError by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     var containerColorUser by remember { mutableStateOf(Color.Black) }
-    var containerColorHost by remember { mutableStateOf(Color.Black) }
     var containerColorPass by remember { mutableStateOf(Color.Black) }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     var showProgressDialog by remember { mutableStateOf(false) }
 
-
-    BackHandler(enabled = true) {
-        // La lógica que quieres ejecutar cuando se presiona el botón de retroceso
-        (context as ComponentActivity).finish()
-
-    }
 
     if (showProgressDialog) {
         Dialog(onDismissRequest = { showProgressDialog = false }) {
