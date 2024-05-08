@@ -55,21 +55,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.app.ComponentActivity
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.R
 import com.example.noctuapp.elements.TransparentTextField
 import com.example.noctuapp.ui.theme.NoctuappTheme
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 @SuppressLint("RestrictedApi")
 @Composable
-fun VistaLogin(){
+fun VistaLogin(navController: NavController) {
 
-    val url = rememberSaveable { mutableStateOf("https://bnt.test.ip4business.es") }
-    val username = rememberSaveable { mutableStateOf("soporte@bntbusiness.es") }
-    val password = rememberSaveable { mutableStateOf("9nFrCuiFafIaV6t") }
-    val phoneNumber = rememberSaveable { mutableStateOf("655364829") }
+    val username = rememberSaveable { mutableStateOf("") }
+    val password = rememberSaveable { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
     var datosError by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
@@ -162,18 +162,6 @@ fun VistaLogin(){
                 PasswordVisualTransformation()
             }
         )
-        TransparentTextField(
-            textFieldValue = phoneNumber,
-            textLabel = stringResource(R.string.telefono),
-            keyboardType = KeyboardType.Phone,
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    focusManager.clearFocus()                    }
-            ),
-            imeAction = ImeAction.Next,
-            containerColor = containerColorUser
-
-        )
         Spacer(modifier = Modifier.size(10.dp))
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -206,7 +194,11 @@ fun VistaLogin(){
                             }
 
                             if (formIsValid) {
+                                // aqui tendria que hacer la llamada a la comprobacion en la bbdd,
+                                //SI LOS DATOS SON CORRECTOS TE HACE LA NAVEGACION A LA SIGUEINTE PESTAÑA SINO SALTA EL ERROR
                                 Log.i("login","todo bien")
+                                navController.navigate(route = selectNavegation.Lugares.route)
+
                             }
                         } catch (e: Exception) {
                             Log.e("ButtonOnClick", "Error al realizar el login: ${e.message}")
@@ -284,14 +276,11 @@ fun VistaLogin(){
 @Composable
 fun VistaLoginPreview() {
     NoctuappTheme {
-        val url = rememberSaveable { mutableStateOf("") }
         val username = rememberSaveable { mutableStateOf("") }
         val password = rememberSaveable { mutableStateOf("") }
-        val phoneNumber = rememberSaveable { mutableStateOf("") }
         var passwordVisibility by remember { mutableStateOf(false) }
         val focusManager = LocalFocusManager.current
         var containerColorUser by remember { mutableStateOf(Color.Black) }
-        var containerColorHost by remember { mutableStateOf(Color.Black) }
         var containerColorPass by remember { mutableStateOf(Color.Black) }
 
 
