@@ -239,21 +239,7 @@ fun VistaLogin(navController: NavController) {
         verticalArrangement = Arrangement.Bottom
 
     ) {
-        FloatingActionButton(
-            modifier = Modifier
-                .size(72.dp)
-                .background(Color.Transparent),
-            containerColor = Color.Black ,
-            elevation = FloatingActionButtonDefaults.elevation(
-                defaultElevation = 0.dp,
-                pressedElevation = 0.dp
-            ),
-            onClick = {
-                            }
 
-        ) {
-
-        }
     }
 }
 

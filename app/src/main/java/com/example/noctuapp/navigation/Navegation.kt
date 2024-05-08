@@ -15,17 +15,14 @@ import com.example.noctuapp.lugares.VistaLugares
 fun NavigationApp(ruta:String){
     val navController= rememberNavController()
 
-    NavHost(navController = navController, startDestination = ruta ){
-        composable(route= selectNavegation.Login.route){
-            VistaLogin(navController=navController)
+    NavHost(navController = navController, startDestination = ruta ) {
+        composable(route = selectNavegation.Login.route) {
+            VistaLogin(navController = navController)
         }
 
-    }
-
-    NavHost(navController = navController, startDestination = ruta ){
-        composable(route= selectNavegation.Lugares.route){
-            VistaLugares(navController=navController)
+        composable(route = selectNavegation.Lugares.route) {
+            VistaLugares(navController = navController)
         }
-
     }
+
 }
