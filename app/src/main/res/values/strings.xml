@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">Noctuapp</string>
-    <string name="url">Host</string>
     <string name="usuario">Usuario</string>
     <string name="contraseña">Contraseña</string>
     <string name="login">Iniciar</string>
-    <string name="telefono">Teléfono:XXXXXXXXX</string>
+    <string name="register">Registrar</string>
     <string name="telefonoBar">Teléfono</string>
-    <string name="contactos">Contactos</string>
     <string name="buscar">Buscar</string>
-    <string name="qr">"Escaneé aquí al QR"</string>
 </resources>

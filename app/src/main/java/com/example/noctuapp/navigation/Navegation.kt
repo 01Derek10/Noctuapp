@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.noctuapp.login.VistaLogin
 import com.example.myapplication.navegation.selectNavegation
+import com.example.noctuapp.BottomAppBar
 import com.example.noctuapp.lugares.VistaLugares
 
 
@@ -21,7 +22,7 @@ fun NavigationApp(ruta:String){
         }
 
         composable(route = selectNavegation.Lugares.route) {
-            VistaLugares(navController = navController)
+            VistaLugares(navController = navController, bottomAppBar = BottomAppBar())
         }
     }
 

@@ -1,4 +1,5 @@
 package com.example.noctuapp.login
+
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,13 +23,18 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.R
 import com.example.noctuapp.elements.TransparentTextField
 import com.example.noctuapp.ui.theme.NoctuappTheme
+
+import com.example.noctuapp.ui.theme.noctuapp
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,8 +49,10 @@ fun VistaLogin(navController: NavController) {
     var passwordVisibility by remember { mutableStateOf(false) }
     var datosError by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
-    var containerColorUser by remember { mutableStateOf(Color.Black) }
-    var containerColorPass by remember { mutableStateOf(Color.Black) }
+
+    var containerColorUser by remember { mutableStateOf(noctuapp) }
+    var containerColorPass by remember { mutableStateOf(noctuapp) }
+
     val coroutineScope = rememberCoroutineScope()
     var showProgressDialog by remember { mutableStateOf(false) }
 
@@ -56,7 +64,36 @@ fun VistaLogin(navController: NavController) {
                     .background(Color.Transparent, shape = RoundedCornerShape(8.dp))
                     .padding(16.dp)
             ) {
-                CircularProgressIndicator(color = Color.Black)
+                CircularProgressIndicator(color = Color(0xFF800080)) // Color morado
+            }
+        }
+    }
+
+
+    suspend fun registerUser(username: String, password: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL("http://192.168.215.190/register.php")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "POST"
+                connection.doOutput = true
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+
+                val requestBody = "username=$username&password=$password"
+                val outputStreamWriter = OutputStreamWriter(connection.outputStream)
+                outputStreamWriter.write(requestBody)
+                outputStreamWriter.flush()
+
+                val responseCode = connection.responseCode
+                val responseMessage = connection.inputStream.bufferedReader().readText()
+                connection.disconnect()
+
+                Log.d("HTTP_RESPONSE", "Response Code: $responseCode, Response: $responseMessage")
+
+                responseCode == 200 && responseMessage.contains("\"status\":\"success\"")
+            } catch (e: Exception) {
+                Log.e("HTTP_ERROR", "Error during HTTP request: ${e.message}")
+                false
             }
         }
     }
@@ -104,7 +141,9 @@ fun VistaLogin(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+
+                painter = painterResource(id = R.drawable.logo_con_nombre),
+
                 contentDescription = "logo",
                 modifier = Modifier.size(200.dp)
             )
@@ -165,7 +204,9 @@ fun VistaLogin(navController: NavController) {
                     .width(280.dp)
                     .height(50.dp),
                 shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(Color.Black),
+
+                colors = ButtonDefaults.buttonColors(noctuapp),
+
                 onClick = {
                     coroutineScope.launch {
                         try {
@@ -175,14 +216,14 @@ fun VistaLogin(navController: NavController) {
                                 containerColorUser = Color(0xFFFE0000)
                                 formIsValid = false
                             } else {
-                                containerColorUser = Color.Black
+                                containerColorUser = noctuapp
                             }
 
                             if (password.value.isEmpty()) {
                                 containerColorPass = Color(0xFFFE0000)
                                 formIsValid = false
                             } else {
-                                containerColorPass = Color.Black
+                                containerColorPass = noctuapp
                             }
 
                             if (formIsValid) {
@@ -207,6 +248,55 @@ fun VistaLogin(navController: NavController) {
                     style = MaterialTheme.typography.headlineSmall
                 )
             }
+            Spacer(modifier = Modifier.size(10.dp))
+
+            Button(
+                modifier = Modifier
+                    .width(280.dp)
+                    .height(50.dp),
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.buttonColors(noctuapp),
+                onClick = {
+                    coroutineScope.launch {
+                        try {
+                            var formIsValid = true
+
+                            if (username.value.isEmpty()) {
+                                containerColorUser = Color(0xFFFE0000)
+                                formIsValid = false
+                            } else {
+                                containerColorUser = noctuapp
+                            }
+
+                            if (password.value.isEmpty()) {
+                                containerColorPass = Color(0xFFFE0000)
+                                formIsValid = false
+                            } else {
+                                containerColorPass = noctuapp
+                            }
+
+                            if (formIsValid) {
+                                showProgressDialog = true
+                                val success = registerUser(username.value, password.value)
+                                showProgressDialog = false
+                                if (success) {
+                                    navController.navigate(route = selectNavegation.Lugares.route)
+                                } else {
+                                    datosError = true
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.e("ButtonOnClick", "Error al realizar el registro: ${e.message}")
+                            datosError = true // Mostrar el diálogo de error si ocurre una excepción
+                        }
+                    }
+                }
+            ) {
+                Text(
+                    text = stringResource(id = R.string.register),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
         }
     }
     if (datosError) {
@@ -217,7 +307,7 @@ fun VistaLogin(navController: NavController) {
             confirmButton = {
                 Button(
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black
+                        containerColor = noctuapp
                     ),
                     onClick = {
                         // Acción para el botón de confirmar
@@ -245,4 +335,16 @@ fun VistaLogin(navController: NavController) {
     ) {
 
     }
+
 }
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewVistaLogin() {
+    NoctuappTheme {
+        // Simulamos un NavController
+        val navController = rememberNavController()
+        VistaLogin(navController = navController)
+    }
+}
+
