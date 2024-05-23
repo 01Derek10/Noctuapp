@@ -77,6 +77,11 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.logging.interceptor)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.volley)
+    implementation(libs.firebase.crashlytics.buildtools)
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

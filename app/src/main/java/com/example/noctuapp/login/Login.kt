@@ -32,7 +32,9 @@ import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.R
 import com.example.noctuapp.elements.TransparentTextField
 import com.example.noctuapp.ui.theme.NoctuappTheme
+
 import com.example.noctuapp.ui.theme.noctuapp
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,8 +49,10 @@ fun VistaLogin(navController: NavController) {
     var passwordVisibility by remember { mutableStateOf(false) }
     var datosError by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+
     var containerColorUser by remember { mutableStateOf(noctuapp) }
     var containerColorPass by remember { mutableStateOf(noctuapp) }
+
     val coroutineScope = rememberCoroutineScope()
     var showProgressDialog by remember { mutableStateOf(false) }
 
@@ -65,33 +69,6 @@ fun VistaLogin(navController: NavController) {
         }
     }
 
-    suspend fun checkCredentials(username: String, password: String): Boolean {
-        return withContext(Dispatchers.IO) {
-            try {
-                val url = URL("http://192.168.215.190/login.php")
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "POST"
-                connection.doOutput = true
-                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-
-                val requestBody = "username=$username&password=$password"
-                val outputStreamWriter = OutputStreamWriter(connection.outputStream)
-                outputStreamWriter.write(requestBody)
-                outputStreamWriter.flush()
-
-                val responseCode = connection.responseCode
-                val responseMessage = connection.inputStream.bufferedReader().readText()
-                connection.disconnect()
-
-                Log.d("HTTP_RESPONSE", "Response Code: $responseCode, Response: $responseMessage")
-
-                responseCode == 200 && responseMessage.contains("\"status\":\"success\"")
-            } catch (e: Exception) {
-                Log.e("HTTP_ERROR", "Error during HTTP request: ${e.message}")
-                false
-            }
-        }
-    }
 
     suspend fun registerUser(username: String, password: String): Boolean {
         return withContext(Dispatchers.IO) {
@@ -121,6 +98,33 @@ fun VistaLogin(navController: NavController) {
         }
     }
 
+    suspend fun checkCredentials(username: String, password: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL("http://192.168.1.140/android/v1/login.php")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "POST"
+                connection.doOutput = true
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+
+                val requestBody = "username=$username&password=$password"
+                val outputStreamWriter = OutputStreamWriter(connection.outputStream)
+                outputStreamWriter.write(requestBody)
+                outputStreamWriter.flush()
+
+                val responseCode = connection.responseCode
+                val responseMessage = connection.inputStream.bufferedReader().readText()
+                connection.disconnect()
+
+                Log.d("HTTP_RESPONSE", "Response Code: $responseCode, Response: $responseMessage")
+
+                responseCode == 200 && responseMessage.contains("\"status\":\"success\"")
+            } catch (e: Exception) {
+                Log.e("HTTP_ERROR", "Error during HTTP request: ${e.message}")
+                false
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -137,7 +141,9 @@ fun VistaLogin(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
+
                 painter = painterResource(id = R.drawable.logo_con_nombre),
+
                 contentDescription = "logo",
                 modifier = Modifier.size(200.dp)
             )
@@ -198,7 +204,9 @@ fun VistaLogin(navController: NavController) {
                     .width(280.dp)
                     .height(50.dp),
                 shape = RoundedCornerShape(50),
+
                 colors = ButtonDefaults.buttonColors(noctuapp),
+
                 onClick = {
                     coroutineScope.launch {
                         try {
@@ -327,6 +335,7 @@ fun VistaLogin(navController: NavController) {
     ) {
 
     }
+
 }
 
 @Preview(showBackground = true)
@@ -338,3 +347,4 @@ fun PreviewVistaLogin() {
         VistaLogin(navController = navController)
     }
 }
+

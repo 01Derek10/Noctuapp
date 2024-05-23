@@ -22,6 +22,10 @@ splash='1.0.1'
 room_version = "2.6.1"
 lifecycleViewModel = "1.6.7"
 logginHtpp="4.12.0"
+volley = "1.2.1"
+firebaseCrashlyticsBuildtools = "3.0.0"
+
+recyclerview = "1.3.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,6 +59,10 @@ androidx-room-ktx={group="androidx.room",name="room-ktx",version.ref="room_versi
 androidx-room-compiler={group="androidx.room",name="room-compiler",version.ref="room_version"}
 androidx-lifecycle-viewmodel={group="androidx.compose.runtime",name="runtime-livedata",version.ref="lifecycleViewModel"}
 logging-interceptor={group="com.squareup.okhttp3",name="logging-interceptor",version.ref="logginHtpp"}
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
