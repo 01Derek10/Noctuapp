@@ -9,10 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.noctuapp.login.VistaLogin
 import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.elements.BottomAppBar
-import com.example.noctuapp.elements.Items_menu
 import com.example.noctuapp.lugares.VistaLugares
-import com.example.noctuapp.ofertas.Ofertas
-import com.example.noctuapp.perfil.Perfil
+import com.example.noctuapp.ofertas.VistaOfertas
+
 
 
  @Composable
@@ -28,12 +27,12 @@ fun NavigationApp(ruta:String){
             VistaLugares(navController = navController, bottomAppBar = BottomAppBar())
         }
 
-        composable(route = selectNavegation.Perfil.route) {
-            Perfil(navController = navController, bottomAppBar = BottomAppBar())
-        }
+       /* composable(route = selectNavegation.Perfil.route) {
+            VistaPerfil(navController = navController, bottomAppBar = BottomAppBar())
+        }*/
 
         composable(route = selectNavegation.Ofertas.route) {
-            Ofertas(navController = navController, bottomAppBar = BottomAppBar())
+            VistaOfertas(navController = navController, bottomAppBar = BottomAppBar())
         }
     }
 

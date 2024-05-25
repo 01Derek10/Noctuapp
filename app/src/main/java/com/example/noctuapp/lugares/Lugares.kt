@@ -38,6 +38,7 @@ import com.example.noctuapp.ui.theme.NoctuappTheme
 @SuppressLint("RestrictedApi")
 @Composable
 fun VistaLugares(navController: NavController, bottomAppBar: BottomAppBar) {
+    bottomAppBar.BottomBar(navController,0)
     NoctuappTheme {
         val listPlaces = listOf(
             PartyPlace(1, "Sala Gold", "Calle Luis de Velázquez, 5"),
@@ -77,7 +78,9 @@ fun VistaLugares(navController: NavController, bottomAppBar: BottomAppBar) {
                 }
 
         }
-        LazyColumn {
+        LazyColumn(modifier = Modifier.padding(bottom = 80.dp)
+        ) {
+
             items(
                 items = listPlaces,
                 itemContent = { place ->
@@ -86,7 +89,11 @@ fun VistaLugares(navController: NavController, bottomAppBar: BottomAppBar) {
             )
         }
 
+
     }
+
+
+
 
 }
 
@@ -99,7 +106,7 @@ data class PartyPlace(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun VistaLoginPreview( ) {
+fun VistaLoginPreview() {
     NoctuappTheme {
         VistaLugares(rememberNavController(), BottomAppBar())
     }

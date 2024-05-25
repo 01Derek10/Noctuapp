@@ -61,7 +61,7 @@ fun Perfil(navController: NavController, bottomAppBar: BottomAppBar) {
 
     Scaffold(
         bottomBar = {
-            BottomAppBar().bottomBar(navController = navController)
+            BottomAppBar().BottomBar(navController,2)
         },
         content = { paddingValues ->
             Column(
