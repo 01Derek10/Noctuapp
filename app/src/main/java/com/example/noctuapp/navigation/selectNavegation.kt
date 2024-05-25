@@ -6,6 +6,10 @@ sealed class selectNavegation(val route:String) {
 
     object Lugares:selectNavegation("lugares")
 
+    object Perfil:selectNavegation("perfil")
+
+    object Ofertas:selectNavegation("ofertas")
+
 }
 
 
