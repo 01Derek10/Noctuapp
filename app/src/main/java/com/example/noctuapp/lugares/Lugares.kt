@@ -29,7 +29,7 @@ import androidx.navigation.NavController
 
 
 import androidx.navigation.compose.rememberNavController
-import com.example.noctuapp.BottomAppBar
+import com.example.noctuapp.elements.BottomAppBar
 
 import com.example.noctuapp.ui.theme.NoctuappTheme
 
