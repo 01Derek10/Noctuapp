@@ -1,4 +1,4 @@
-package com.example.noctuapp
+package com.example.noctuapp.elements
 
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.example.myapplication.navegation.selectNavegation
+import com.example.noctuapp.MainActivity
 
 class BottomAppBar {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

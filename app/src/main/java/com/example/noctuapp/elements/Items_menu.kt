@@ -1,4 +1,6 @@
-package com.example.noctuapp
+package com.example.noctuapp.elements
+
+import com.example.noctuapp.R
 
 sealed class Items_menu (
     val icon : Int,

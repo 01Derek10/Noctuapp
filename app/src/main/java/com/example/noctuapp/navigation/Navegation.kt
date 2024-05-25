@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.noctuapp.login.VistaLogin
 import com.example.myapplication.navegation.selectNavegation
-import com.example.noctuapp.BottomAppBar
+import com.example.noctuapp.elements.BottomAppBar
 import com.example.noctuapp.lugares.VistaLugares
 
 
