@@ -13,17 +13,16 @@ if ($conn->connect_error) {
 }
 
 // Obtener valores de POST
-$user = $_POST['username'];
-$pass = $_POST['password'];
+$username = $_POST['username'];
+$email = $_POST['email'];
 
-// Preparar y ejecutar la consulta
-$stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
-$stmt->bind_param("ss", $user, $pass);
-$stmt->execute();
-$result = $stmt->get_result();
+// Preparar y ejecutar la consulta de actualización
+$stmt = $conn->prepare("UPDATE users SET email = ? WHERE username = ?");
+$stmt->bind_param("ssss", $email, $age, $description, $username);
+$success = $stmt->execute();
 
 // Verificar resultados
-if ($result->num_rows > 0) {
+if ($success) {
     echo json_encode(array("status" => "success"));
 } else {
     echo json_encode(array("status" => "error"));

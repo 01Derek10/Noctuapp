@@ -17,13 +17,12 @@ $user = $_POST['username'];
 $pass = $_POST['password'];
 
 // Preparar y ejecutar la consulta
-$stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
+$stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
 $stmt->bind_param("ss", $user, $pass);
-$stmt->execute();
-$result = $stmt->get_result();
+$success = $stmt->execute();
 
 // Verificar resultados
-if ($result->num_rows > 0) {
+if ($success) {
     echo json_encode(array("status" => "success"));
 } else {
     echo json_encode(array("status" => "error"));
