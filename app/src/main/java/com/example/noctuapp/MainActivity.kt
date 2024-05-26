@@ -1,5 +1,6 @@
 package com.example.noctuapp
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.noctuapp.chatbot.FloatingWidgetService
 import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.navigation.NavigationApp
 import com.example.noctuapp.ui.theme.NoctuappTheme
