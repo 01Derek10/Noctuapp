@@ -5,7 +5,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.view.WindowManager
-import com.example.noctuapp.showFloatingChatbot
+import com.example.noctuapp.chatbot.*
 
 
 class FloatingWidgetService : Service() {
@@ -19,7 +19,6 @@ class FloatingWidgetService : Service() {
     override fun onCreate() {
         super.onCreate()
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
-        showFloatingChatbot(this)
     }
 
     override fun onDestroy() {
