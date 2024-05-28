@@ -13,19 +13,30 @@ if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
-// Obtener el nombre de la empresa desde la solicitud GET
-$nombre_empresa = $_GET['nombre_empresa'] ?? '';
+// Obtener los nombres desde la solicitud POST
+$nombres = $_POST['nombres'] ?? '';
 
-// Verificar si se proporcionó el nombre de la empresa
-if(empty($nombre_empresa)) {
-    echo json_encode(array("status" => "error", "message" => "No se proporcionó el nombre de la empresa."));
+// Verificar si se proporcionaron los nombres
+if(empty($nombres)) {
+    echo json_encode(array("status" => "error", "message" => "No se proporcionaron los nombres."));
     exit();
 }
 
-// Consulta SQL para obtener todos los campos de la tabla "empresas" filtrados por el nombre
-$sql = "SELECT * FROM empresas WHERE nombre = ?";
+// Convertir los nombres en un array
+$nombresArray = json_decode($nombres, true);
+if (!is_array($nombresArray)) {
+    echo json_encode(array("status" => "error", "message" => "Formato incorrecto de nombres."));
+    exit();
+}
+
+// Crear la consulta SQL para buscar empresas por nombres
+$placeholders = implode(',', array_fill(0, count($nombresArray), '?'));
+$sql = "SELECT * FROM empresas WHERE nombre IN ($placeholders)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $nombre_empresa);
+
+// Vincular los parámetros
+$types = str_repeat('s', count($nombresArray));
+$stmt->bind_param($types, ...$nombresArray);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -38,7 +49,7 @@ if ($result->num_rows > 0) {
         $empresasArray[] = $row;
     }
 } else {
-    echo json_encode(array("status" => "error", "message" => "No se encontraron empresas con ese nombre."));
+    echo json_encode(array("status" => "error", "message" => "No se encontraron empresas con los nombres proporcionados."));
     exit();
 }
 
