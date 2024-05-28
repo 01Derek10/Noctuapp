@@ -1,5 +1,6 @@
 package com.example.noctuapp.ofertas
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -43,11 +44,13 @@ fun VistaOfertas(navController: NavController, bottomAppBar: BottomAppBar) {
             Oferta(15, "The Hall", "Calle Héroe de Sostoa, 65"),
         )
         @Composable
-        fun PlaceItem(place: Oferta) {
+        fun PlaceItem(place: Oferta, onClick:(Oferta)->Unit) {
             Card (
                 modifier = Modifier
                     .padding(horizontal = 8.dp, vertical = 8.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable { onClick(place) },
+
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(corner = CornerSize(16.dp))
@@ -69,7 +72,10 @@ fun VistaOfertas(navController: NavController, bottomAppBar: BottomAppBar) {
             items(
                 items = listPlaces,
                 itemContent = { place ->
-                    PlaceItem(place = place)
+                    PlaceItem(place = place){
+                            selectedPlace ->
+                        navController.navigate("detalles/${selectedPlace.id}")
+                    }
                 }
             )
         }
