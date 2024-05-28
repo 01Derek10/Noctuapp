@@ -60,14 +60,14 @@ object NoctuBot {
                 index -= 1
                 val item = empresas.get(index)
                 if(!result.contains(empresa, ignoreCase = true)){
-                    result += "Nombre: ${item.nombre} \nUbicación: ${item.ubicacion}\n"
+                    result += "\nNombre: ${item.nombre} \nUbicación: ${item.ubicacion}"
                 }
             }
         }
 
         tagsEmpresa.forEach { tag ->
             Log.i("TAG", tag)
-            if(message.contains(tag, ignoreCase = true)){
+            if(message.contains(tag, ignoreCase = true) && !result.contains(tag)){
                 Log.i("TAG", tag)
                 Log.i("INDEX", tagsEmpresa.indexOf(tag).toString())
                 result += "Las empresas que coinciden con dichas características son:"
@@ -80,7 +80,7 @@ object NoctuBot {
             }
         }
 
-        result += "\n\nSi quieres más información sobre estos locales escribe el nombre"
+
         return result
     }
 
