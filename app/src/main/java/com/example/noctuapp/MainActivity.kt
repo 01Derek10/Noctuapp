@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
                             FloatingChatbotDialog(onDismiss = { showDialog = false })
                         }
                         NavigationApp(
-                            ruta = selectNavegation.Login.route,
+                            ruta = selectNavegation.Chat.route,
                             navController = navController,
                             modifier = Modifier.padding(paddingValues)
                         )
