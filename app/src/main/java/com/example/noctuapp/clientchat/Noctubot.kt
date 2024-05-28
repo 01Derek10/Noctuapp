@@ -60,7 +60,7 @@ object NoctuBot {
                 index -= 1
                 val item = empresas.get(index)
                 if(!result.contains(empresa, ignoreCase = true)){
-                    result += "\nNombre: ${item.nombre} \nUbicación: ${item.ubicacion}"
+                    result += "NOMBRE: ${item.nombre} \nUBICACIÓN: ${item.ubicacion}"
                 }
             }
         }

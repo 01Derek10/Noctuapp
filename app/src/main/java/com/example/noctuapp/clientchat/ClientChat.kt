@@ -2,8 +2,10 @@ package com.example.noctuapp.clientchat
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
@@ -13,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ fun VistaChat() {
     val coroutineScope = rememberCoroutineScope()
     var userMessage by remember { mutableStateOf(TextFieldValue("")) }
     var messages by remember { mutableStateOf(listOf(Message("¿Quieres encontrar tu sitio ideal? Has venido al sitio correcto.", isUser = false))) }
+    val listState = rememberLazyListState()
 
     NoctuappTheme {
         Column(
@@ -39,14 +41,13 @@ fun VistaChat() {
                 .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
         ) {
-            MessagesList(messages = messages, modifier = Modifier.weight(1f))
-            Spacer(modifier = Modifier.height(80.dp)) // Añadir espacio de 80dp
+            MessagesList(messages = messages, modifier = Modifier.weight(1f), listState = listState)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surface)
-                    .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 80.dp) // Padding personalizado
+                    .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 8.dp) // Padding personalizado
             ) {
                 OutlinedTextField(
                     value = userMessage,
@@ -63,7 +64,6 @@ fun VistaChat() {
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
-
                         coroutineScope.launch {
                             if (userMessage.text.isNotBlank()) {
                                 val empresas = withContext(Dispatchers.IO) {
@@ -73,28 +73,34 @@ fun VistaChat() {
                                 val botResponse = NoctuBot.getResponse(userMessage.text, empresas)
                                 messages = messages + Message(botResponse, isUser = false)
                                 userMessage = TextFieldValue("") // Clear the input field
+                                coroutineScope.launch {
+                                    listState.animateScrollToItem(messages.size - 1)
+                                }
                             }
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = noctuapp)
                 ) {
                     Text("Send")
-
                 }
             }
+            Spacer(modifier = Modifier.height(80.dp)) // Añadir espacio de 80dp en la parte inferior
         }
     }
 }
 
 @Composable
-fun MessagesList(messages: List<Message>, modifier: Modifier = Modifier) {
-    Column(
+fun MessagesList(messages: List<Message>, modifier: Modifier = Modifier, listState: LazyListState) {
+    LazyColumn(
+        state = listState,
         modifier = modifier
-            .verticalScroll(rememberScrollState())
     ) {
-        messages.forEach { message ->
+        items(messages) { message ->
             MessageItem(message)
         }
+    }
+    LaunchedEffect(messages) {
+        listState.animateScrollToItem(messages.size - 1)
     }
 }
 
@@ -139,6 +145,7 @@ fun MessageItem(message: Message) {
 }
 
 data class Message(val text: String, val isUser: Boolean)
+
 
 @Preview(showBackground = true)
 @Composable
