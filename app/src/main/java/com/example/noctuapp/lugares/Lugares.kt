@@ -2,25 +2,40 @@ package com.example.noctuapp.lugares
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,13 +47,13 @@ import com.example.noctuapp.chatbot.*
 import com.example.noctuapp.elements.BottomAppBar
 
 import com.example.noctuapp.ui.theme.NoctuappTheme
-
+import com.example.noctuapp.ui.theme.noctuapp
 
 
 @SuppressLint("RestrictedApi")
 @Composable
 fun VistaLugares(navController: NavController, bottomAppBar: BottomAppBar) {
-    bottomAppBar.BottomBar(navController,0)
+    //bottomAppBar.BottomBar(navController,0)
     NoctuappTheme {
         val listPlaces = listOf(
             PartyPlace(1, "Sala Gold", "Calle Luis de Velázquez, 5"),
@@ -59,12 +74,15 @@ fun VistaLugares(navController: NavController, bottomAppBar: BottomAppBar) {
         )
         @Composable
         fun PlaceItem(place: PartyPlace) {
+            val context = LocalContext.current
+            var expanded by remember { mutableStateOf(false) }
             Card (
                 modifier = Modifier
                     .padding(horizontal = 8.dp, vertical = 8.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable { expanded = !expanded },
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
+                colors = CardDefaults.cardColors(containerColor = noctuapp),
                 shape = RoundedCornerShape(corner = CornerSize(16.dp))
                 ){
                     Column(
@@ -74,6 +92,25 @@ fun VistaLugares(navController: NavController, bottomAppBar: BottomAppBar) {
                     ) {
                         Text(text = place.name, style = typography.headlineLarge)
                         Text(text = "Ubicación: ${place.location}", style = typography.bodyMedium)
+                        if(expanded){
+                            IconButton(onClick = {
+
+                                val intent =
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://maps.app.goo.gl/hPT8ik3isxuEWBpi6")
+                                    )
+
+
+                                context.startActivity(intent)
+                            }) {
+                                Row {
+                                    Icon(imageVector = Icons.Default.LocationOn, contentDescription = null)
+                                }
+                            }
+                        }
+
+
                     }
                 }
 
