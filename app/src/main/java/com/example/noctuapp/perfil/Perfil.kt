@@ -36,7 +36,7 @@ import java.net.URL
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Perfil(navController: NavController, bottomAppBar: BottomAppBar) {
+fun VistaPerfil(navController: NavController, bottomAppBar: BottomAppBar) {
     val name = rememberSaveable { mutableStateOf("") }
     val lastName = rememberSaveable { mutableStateOf("") }
     val age = rememberSaveable { mutableStateOf("") }
@@ -248,6 +248,6 @@ suspend fun updateUserData(username: String, email: String): Boolean {
 @Composable
 fun PreviewPerfil() {
     NoctuappTheme {
-        Perfil(navController = rememberNavController(), bottomAppBar = BottomAppBar())
+        VistaPerfil(navController = rememberNavController(), bottomAppBar = BottomAppBar())
     }
 }
