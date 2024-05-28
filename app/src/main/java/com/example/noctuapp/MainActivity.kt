@@ -10,11 +10,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.noctuapp.chatbot.FloatingChatbotDialog
-import com.example.noctuapp.elements.FloatingActionButton
 import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.elements.BottomAppBar
+import com.example.noctuapp.elements.FloatingActionButton
 import com.example.noctuapp.navigation.NavigationApp
 import com.example.noctuapp.ui.theme.NoctuappTheme
 
@@ -35,15 +36,31 @@ class MainActivity : ComponentActivity() {
             NoctuappTheme {
                 val navController = rememberNavController()
                 var showDialog by remember { mutableStateOf(false) }
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
 
                 Scaffold(
                     bottomBar = {
-                        BottomAppBar().BottomBar(navController, seleccionado = 0)
+                        if (currentRoute in listOf(
+                                selectNavegation.Lugares.route,
+                                selectNavegation.Ofertas.route,
+                                selectNavegation.Perfil.route
+                            )
+                        ) {
+                            BottomAppBar().BottomBar(navController, seleccionado = 0)
+                        }
                     },
                     floatingActionButton = {
-                        FloatingActionButton(onClick = {
-                            showDialog = true
-                        })
+                        if (currentRoute in listOf(
+                                selectNavegation.Lugares.route,
+                                selectNavegation.Ofertas.route
+
+                            )
+                        ) {
+                            FloatingActionButton(onClick = {
+                                showDialog = true
+                            })
+                        }
                     },
                     floatingActionButtonPosition = FabPosition.End,
                     content = { paddingValues ->
