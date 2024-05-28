@@ -55,6 +55,7 @@ fun VistaChat() {
                         val botResponse = NoctuBot.getResponse(userMessage.text, empresas)
                         messages = messages + Message(botResponse, isUser = false)
                         userMessage = TextFieldValue("") // Clear the input field
+                        //sdfsdafaadsfasdf
                     }
                 }
             }) {
