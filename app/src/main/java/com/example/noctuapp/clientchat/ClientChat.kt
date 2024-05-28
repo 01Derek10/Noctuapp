@@ -79,6 +79,7 @@ fun VistaChat() {
                     colors = ButtonDefaults.buttonColors(containerColor = noctuapp)
                 ) {
                     Text("Send")
+
                 }
             }
         }
