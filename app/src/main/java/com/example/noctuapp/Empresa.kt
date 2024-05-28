@@ -12,8 +12,8 @@ import java.io.OutputStream
 data class Empresa(
     val id: Int,
     val nombre: String,
-    val tags: String
-    // Añade más propiedades según la estructura de tu tabla "empresas"
+    val tags: String,
+    val direccion: String // Nueva propiedad añadida
 )
 
 // Función para llamar al script PHP y obtener las empresas
@@ -64,7 +64,7 @@ fun getEmpresasByTagsFromPHP(tags: String): Array<Empresa> {
 }
 
 fun getEmpresasByNombresFromPHP(nombres: Array<String>): Array<Empresa> {
-    val url = URL("http://tu_servidor.com/get_empresas_by_nombres.php") // Cambia por la ruta correcta
+    val url = URL("http://192.168.1.148/get_empresas_by_nombres.php") // Cambia por la ruta correcta
     val connection = url.openConnection() as HttpURLConnection
     connection.requestMethod = "POST"
     connection.doOutput = true

@@ -44,7 +44,8 @@ class MainActivity : ComponentActivity() {
                         if (currentRoute in listOf(
                                 selectNavegation.Lugares.route,
                                 selectNavegation.Ofertas.route,
-                                selectNavegation.Perfil.route
+                                selectNavegation.Perfil.route,
+                                selectNavegation.Chat.route
                             )
                         ) {
                             BottomAppBar().BottomBar(navController, seleccionado = 0)

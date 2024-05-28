@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.noctuapp.login.VistaLogin
 import com.example.myapplication.navegation.selectNavegation
+import com.example.noctuapp.clientchat.VistaChat
 import com.example.noctuapp.elements.BottomAppBar
 import com.example.noctuapp.lugares.VistaLugares
 import com.example.noctuapp.ofertas.VistaOfertas
@@ -32,6 +33,10 @@ fun NavigationApp(ruta: String, navController: NavHostController, modifier: Modi
 
         composable(route = selectNavegation.Ofertas.route) {
             VistaOfertas(navController = navController, bottomAppBar = BottomAppBar())
+        }
+
+        composable(route = selectNavegation.Chat.route) {
+            VistaChat()
         }
     }
 

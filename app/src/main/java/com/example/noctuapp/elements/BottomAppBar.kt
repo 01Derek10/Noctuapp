@@ -32,6 +32,12 @@ class BottomAppBar {
                 route = selectNavegation.Ofertas.route
             ),
             MainActivity.BottomNavigationItem(
+                title = "Chat",
+                selectedIcon = Icons.Filled.LocalOffer,
+                unselectedIcon = Icons.Outlined.LocalOffer,
+                route = selectNavegation.Chat.route
+            ),
+            MainActivity.BottomNavigationItem(
                 title = "Perfil",
                 selectedIcon = Icons.Filled.Person,
                 unselectedIcon = Icons.Outlined.Person,
