@@ -24,7 +24,8 @@ import java.net.URL
 
 object NoctuBot {
 
-    private val pubKeywords = listOf("pub", "bar", "ale", "beer", "brewery")
+    private val greetingKeywords = listOf("hola","buenas","buenos dias", "buenas tardes")
+    private val byeKeywords = listOf("adios","hasta luego","gracias",)
 
     fun getResponse(message: String, empresas: Array<Empresa>): String {
         val nombreEmpresas = mutableListOf("asfdasdfadsfghsahgsfdjkgshjbfgbadshjf")
@@ -41,16 +42,26 @@ object NoctuBot {
             }
         }
         Log.i("MENSAJE", message)
-        return if (nombreEmpresas.any{ message.contains(it, ignoreCase = true)} || tagsEmpresa.any{ message.contains(it, ignoreCase = true)}) {
+        return if (nombreEmpresas.any{ message.contains(it, ignoreCase = true)} || tagsEmpresa.any{ message.contains(it, ignoreCase = true)} || greetingKeywords.any{ message.contains(it, ignoreCase = true) } || byeKeywords.any{ message.contains(it, ignoreCase = true) }) {
             generateMessage(nombreEmpresas = nombreEmpresas, message = message, empresas = empresas, tagsEmpresa = tagsEmpresa)
         } else {
-            "Preguntame sobre locales, no puedo ayudarte con otras cosas :("
+            "\nPreguntame sobre locales, no puedo ayudarte con otras cosas :("
         }
     }
 
-    fun generateMessage(nombreEmpresas: MutableList<String>, message: String, empresas: Array<Empresa>, tagsEmpresa: MutableList<String>): String {
+    fun generateMessage(nombreEmpresas: MutableList<String>, message: String, empresas: Array<Empresa>, tagsEmpresa: MutableList<String>, greetingKeywords: List<String>, byeKeywords: List<String>): String {
+        var addedTitle = false
+        var addedGreeting = false
+        var addedBye = false
         var result = String()
         Log.i("MENSAJE", message)
+        greetingKeywords.forEach { word ->
+            if(message.contains(word, ignoreCase = true) && !addedGreeting){
+                result += "Hello! I am here to help you\n"
+                addedGreeting = true
+            }
+        }
+        
         nombreEmpresas.forEach { empresa ->
             Log.i("EMPRESA", empresa)
             if(message.contains(empresa, ignoreCase = true)){
@@ -60,7 +71,7 @@ object NoctuBot {
                 index -= 1
                 val item = empresas.get(index)
                 if(!result.contains(empresa, ignoreCase = true)){
-                    result += "NOMBRE: ${item.nombre} \nUBICACIÓN: ${item.ubicacion}"
+                    result += "NOMBRE: ${item.nombre} \nUBICACIÓN: ${item.ubicacion}\n"
                 }
             }
         }
@@ -68,10 +79,12 @@ object NoctuBot {
         tagsEmpresa.forEach { tag ->
             Log.i("TAG", tag)
             if(message.contains(tag, ignoreCase = true) && !result.contains(tag)){
+                if(!addedTitle){
+                    result += "\nLas empresas que coinciden con dichas características son:"
+                    addedTitle=true
+                }
                 Log.i("TAG", tag)
                 Log.i("INDEX", tagsEmpresa.indexOf(tag).toString())
-                result += "Las empresas que coinciden con dichas características son:"
-
                 empresas.forEach { empresa ->
                     if(empresa.tags.contains(tag,ignoreCase = true) && !result.contains(empresa.nombre,ignoreCase = true)){
                         result += "\n${empresa.nombre}"
@@ -80,6 +93,12 @@ object NoctuBot {
             }
         }
 
+        byeKeywords.forEach { word ->
+            if(message.contains(word, ignoreCase = true) && !addedBye){
+                result += "\nHa sido un placer ayudarte."
+                addedBye = true
+            }
+        }
 
         return result
     }

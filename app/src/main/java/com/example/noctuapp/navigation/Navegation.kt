@@ -11,6 +11,7 @@ import com.example.noctuapp.login.VistaLogin
 import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.clientchat.VistaChat
 import com.example.noctuapp.elements.BottomAppBar
+import com.example.noctuapp.lugares.LugaresRepository
 import com.example.noctuapp.lugares.VistaLugares
 import com.example.noctuapp.ofertas.OfertaRepository
 import com.example.noctuapp.ofertas.VistaOfertas
@@ -25,7 +26,7 @@ fun NavigationApp(ruta: String, navController: NavHostController, modifier: Modi
         }
 
         composable(route = selectNavegation.Lugares.route) {
-            VistaLugares(navController = navController, bottomAppBar = BottomAppBar())
+            VistaLugares(navController = navController, bottomAppBar = BottomAppBar(), lugaresRepository = LugaresRepository())
         }
 
         composable(route = selectNavegation.Perfil.route) {
