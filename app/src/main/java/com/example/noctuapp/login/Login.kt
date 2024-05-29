@@ -142,7 +142,7 @@ fun VistaLogin(navController: NavController) {
         ) {
             Image(
 
-                painter = painterResource(id = R.drawable.logo_con_nombre),
+                painter = painterResource(id = R.drawable.logo_login),
 
                 contentDescription = "logo",
                 modifier = Modifier.size(200.dp)

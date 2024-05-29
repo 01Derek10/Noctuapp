@@ -10,6 +10,8 @@ sealed class selectNavegation(val route:String) {
 
     object Ofertas:selectNavegation("ofertas")
 
+    object Chat:selectNavegation("chat")
+
 }
 
 
