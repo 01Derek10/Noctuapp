@@ -30,6 +30,7 @@ import com.example.noctuapp.ui.theme.noctuapp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -46,6 +47,21 @@ fun VistaPerfil(navController: NavController, bottomAppBar: BottomAppBar) {
     var showProgressDialog by remember { mutableStateOf(false) }
     var saveError by remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            val userData = getUserData("noctuapp") // Replace "username" with the actual username
+            if (userData != null) {
+                name.value = userData.username
+                lastName.value = userData.lastName
+                age.value = userData.age
+                email.value = userData.email
+                description.value = userData.description
+            } else {
+                // Handle data load error
+            }
+        }
+    }
+
     if (showProgressDialog) {
         Dialog(onDismissRequest = { showProgressDialog = false }) {
             Box(
@@ -61,7 +77,7 @@ fun VistaPerfil(navController: NavController, bottomAppBar: BottomAppBar) {
 
     Scaffold(
         bottomBar = {
-            BottomAppBar().BottomBar(navController,2)
+            BottomAppBar().BottomBar(navController, 2)
         },
         content = { paddingValues ->
             Column(
@@ -243,6 +259,54 @@ suspend fun updateUserData(username: String, email: String): Boolean {
         }
     }
 }
+suspend fun getUserData(username: String): UserData? {
+    return withContext(Dispatchers.IO) {
+        try {
+            val url = URL("http://192.168.1.148/get_user.php") // Cambia esto a la URL de tu servidor
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+
+            val requestBody = "username=$username"
+            val outputStreamWriter = OutputStreamWriter(connection.outputStream)
+            outputStreamWriter.write(requestBody)
+            outputStreamWriter.flush()
+
+            val responseCode = connection.responseCode
+            val responseMessage = connection.inputStream.bufferedReader().readText()
+            connection.disconnect()
+
+            Log.d("HTTP_RESPONSE", "Response Code: $responseCode, Response: $responseMessage")
+
+            if (responseCode == 200 && responseMessage.contains("\"status\":\"success\"")) {
+                val jsonObject = JSONObject(responseMessage)
+                val data = jsonObject.getJSONObject("data")
+                return@withContext UserData(
+                    username = data.getString("username"),
+                    email = data.getString("email"),
+                    age = data.getString("edad"),
+                    lastName = data.getString("apellidos"),
+                    description = data.getString("descripcion")
+                )
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("HTTP_ERROR", "Error during HTTP request: ${e.message}")
+            null
+        }
+    }
+}
+
+data class UserData(
+    val username: String,
+    val email: String,
+    val age: String,
+    val lastName: String,
+    val description: String
+)
+
 
 @Preview(showBackground = true)
 @Composable
