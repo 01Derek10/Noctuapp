@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,37 +36,67 @@ import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.elements.BottomAppBar
 import com.example.noctuapp.ui.theme.NoctuappTheme
 import com.example.noctuapp.ui.theme.noctuapp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import java.net.HttpURLConnection
+import java.net.URL
 
+data class Ofertas(
+    val id: Int,
+    val idEmpresa: Int,
+    val descripcion: String,
+    val enlace: String,
+    val nombre: String
+)
+
+class OfertaRepository {
+    suspend fun getofertas(): List<Ofertas> {
+        val url = URL("http://192.168.1.140/ofertas.php")
+        val connection = withContext(Dispatchers.IO) { url.openConnection() as HttpURLConnection }
+        connection.requestMethod = "GET"
+
+        return withContext(Dispatchers.IO) {
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            val jsonArray = JSONArray(response)
+            val lista = mutableListOf<Ofertas>()
+            for (i in 0 until jsonArray.length()) {
+                val jsonObject = jsonArray.getJSONObject(i)
+                val place = Ofertas(
+                    id = jsonObject.getInt("id"),
+                    idEmpresa = jsonObject.getInt("idEmpresa"),
+                    descripcion = jsonObject.getString("descripcion"),
+                    enlace = jsonObject.getString("enlace"),
+                    nombre = jsonObject.getString("nombre"),
+
+                )
+                lista.add(place)
+            }
+            lista
+        }
+    }
+}
 @Composable
-fun VistaOfertas(navController: NavController, bottomAppBar: BottomAppBar) {
+fun VistaOfertas(navController: NavController, bottomAppBar: BottomAppBar, ofertaRepository: OfertaRepository) {
+    val  lista = remember {
+        mutableStateOf<List<Ofertas>>(emptyList())
+    }
+    LaunchedEffect(Unit) {
+        val data = ofertaRepository.getofertas()
+        lista.value=data;
+    }
     NoctuappTheme {
 
-        val listPlaces = listOf(
-            Oferta(1, "Sala Gold", "2x1 en consumiciones hasta las 2:00"),
-            Oferta(2, "Theatro Club", "Calle Lazcano, 5"),
-            Oferta(3, "Andén", "Plaza de Uncibay, 8"),
-            Oferta(4, "Discoteca Liceo", "Calle Beatas, 21"),
-            Oferta(5, "Sala Wenge", "Calle Santa Lucía, 11"),
-            Oferta(6, "Velvet Club", "Calle Convalecientes, 11"),
-            Oferta(7, "Bubbles Lounge Club", "Calle Juan de Padilla, 18"),
-            Oferta(8, "Antigua Casa de Guardia", "Alameda Principal, 18"),
-            Oferta(9, "ZZ Pub", "Calle Tejón y Rodríguez, 6"),
-            Oferta(10, "La Botellita", "Calle Luis de Velázquez, 3"),
-            Oferta(11, "Clarence Jazz Club", "Calle Cañón, 5"),
-            Oferta(12, "Sala Premier", "Calle Molina Lario, 2"),
-            Oferta(13, "Malafama", "Calle Comedias, 15"),
-            Oferta(14, "Sala White", "Calle José Denis Belgrano, 3"),
-            Oferta(15, "The Hall", "Calle Héroe de Sostoa, 65"),
-        )
+
         @Composable
-        fun PlaceItem(place: Oferta) {
+        fun PlaceItem(oferta: Ofertas) {
             val context = LocalContext.current
             var expanded by remember { mutableStateOf(false) }
             Card (
                 modifier = Modifier
                     .padding(horizontal = 8.dp, vertical = 8.dp)
                     .fillMaxWidth()
-                    .clickable { expanded =!expanded },
+                    .clickable { expanded = !expanded },
 
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 colors = CardDefaults.cardColors(containerColor = noctuapp),
@@ -76,15 +107,15 @@ fun VistaOfertas(navController: NavController, bottomAppBar: BottomAppBar) {
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    Text(text = place.name, style = MaterialTheme.typography.headlineLarge)
-                    Text(text = "Información: ${place.informacion}", style = MaterialTheme.typography.bodyMedium)
+                    Text(text = oferta.nombre, style = MaterialTheme.typography.headlineLarge)
+                    Text(text = "Información: ${oferta.descripcion}", style = MaterialTheme.typography.bodyMedium)
                     if(expanded){
                         IconButton(onClick = {
 
                             val intent =
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    Uri.parse("https://www.salagold.com/es/")
+                                    Uri.parse(oferta.enlace)
                                 )
 
 
@@ -103,9 +134,9 @@ fun VistaOfertas(navController: NavController, bottomAppBar: BottomAppBar) {
             modifier = Modifier.padding(bottom = 80.dp)
         ) {
             items(
-                items = listPlaces,
-                itemContent = { place ->
-                    PlaceItem(place = place)
+                items = lista.value,
+                itemContent = { oferta ->
+                    PlaceItem(oferta = oferta)
                 }
             )
         }
@@ -114,16 +145,5 @@ fun VistaOfertas(navController: NavController, bottomAppBar: BottomAppBar) {
 
 }
 
-data class Oferta(
-    val id: Int,
-    val name: String,
-    val informacion: String
-)
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun VistaOfertasPreview( ) {
-    NoctuappTheme {
-        VistaOfertas(rememberNavController(), BottomAppBar())
-    }
-}
+

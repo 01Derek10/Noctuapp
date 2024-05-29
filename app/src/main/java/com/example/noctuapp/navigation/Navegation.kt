@@ -12,6 +12,7 @@ import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.clientchat.VistaChat
 import com.example.noctuapp.elements.BottomAppBar
 import com.example.noctuapp.lugares.VistaLugares
+import com.example.noctuapp.ofertas.OfertaRepository
 import com.example.noctuapp.ofertas.VistaOfertas
 import com.example.noctuapp.perfil.VistaPerfil
 
@@ -32,7 +33,7 @@ fun NavigationApp(ruta: String, navController: NavHostController, modifier: Modi
         }
 
         composable(route = selectNavegation.Ofertas.route) {
-            VistaOfertas(navController = navController, bottomAppBar = BottomAppBar())
+            VistaOfertas(navController = navController, bottomAppBar = BottomAppBar(), ofertaRepository = OfertaRepository())
         }
 
         composable(route = selectNavegation.Chat.route) {
