@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.noctuapp.ui.theme.noctuapp
 
 @Composable
 fun FloatingActionButton(
@@ -28,7 +29,7 @@ fun FloatingActionButton(
             Icon(
                 imageVector = Icons.Filled.FilterList,
                 contentDescription = "Filtro",
-                tint = Color.Black
+                tint = noctuapp
             )
         }
     }

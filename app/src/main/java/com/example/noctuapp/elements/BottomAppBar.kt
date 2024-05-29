@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.navigation.NavController
 import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.MainActivity
+import com.example.noctuapp.ui.theme.noctuapp
 
 class BottomAppBar {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -63,7 +64,8 @@ class BottomAppBar {
                         BadgedBox(badge = { }) {
                             Icon(
                                 imageVector = if (selectedItemIndexed == index) item.selectedIcon else item.unselectedIcon,
-                                contentDescription = item.title
+                                contentDescription = item.title,
+                                tint = noctuapp
                             )
                         }
                     }
