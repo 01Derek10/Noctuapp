@@ -1,5 +1,6 @@
 package com.example.noctuapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -77,5 +78,10 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+
+        // No llames a super.onBackPressed() para deshabilitar la acción de regresar
     }
 }

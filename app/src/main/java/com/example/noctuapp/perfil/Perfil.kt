@@ -187,7 +187,7 @@ fun VistaPerfil(navController: NavController, bottomAppBar: BottomAppBar) {
                     onClick = {
                         coroutineScope.launch {
                             showProgressDialog = true
-                            val success = updateUserData(name.value, email.value)
+                            val success = updateUserData(name.value, email.value, description.value, age.value, lastName.value)
                             showProgressDialog = false
                             if (!success) {
                                 saveError = true
@@ -232,16 +232,16 @@ fun VistaPerfil(navController: NavController, bottomAppBar: BottomAppBar) {
     }
 }
 
-suspend fun updateUserData(username: String, email: String): Boolean {
+suspend fun updateUserData(username: String, email: String, description: String, age: String, lastName: String): Boolean {
     return withContext(Dispatchers.IO) {
         try {
-            val url = URL("http://192.168.1.148/update.php") // Cambia esto a la URL de tu servidor
+            val url = URL("http://192.168.251.190/update.php") // Cambia esto a la URL de tu servidor
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.doOutput = true
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
 
-            val requestBody = "username=$username&email=$email"
+            val requestBody = "username=$username&email=$email&age=$age&lastname=$lastName&description=$description"
             val outputStreamWriter = OutputStreamWriter(connection.outputStream)
             outputStreamWriter.write(requestBody)
             outputStreamWriter.flush()
@@ -262,7 +262,7 @@ suspend fun updateUserData(username: String, email: String): Boolean {
 suspend fun getUserData(username: String): UserData? {
     return withContext(Dispatchers.IO) {
         try {
-            val url = URL("http://192.168.1.148/get_user.php") // Cambia esto a la URL de tu servidor
+            val url = URL("http://192.168.251.190/get_user.php") // Cambia esto a la URL de tu servidor
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.doOutput = true

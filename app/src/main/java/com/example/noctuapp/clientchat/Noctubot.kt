@@ -43,9 +43,9 @@ object NoctuBot {
         }
         Log.i("MENSAJE", message)
         return if (nombreEmpresas.any{ message.contains(it, ignoreCase = true)} || tagsEmpresa.any{ message.contains(it, ignoreCase = true)} || greetingKeywords.any{ message.contains(it, ignoreCase = true) } || byeKeywords.any{ message.contains(it, ignoreCase = true) }) {
-            generateMessage(nombreEmpresas = nombreEmpresas, message = message, empresas = empresas, tagsEmpresa = tagsEmpresa)
+            generateMessage(nombreEmpresas = nombreEmpresas, message = message, empresas = empresas, tagsEmpresa = tagsEmpresa, greetingKeywords, byeKeywords)
         } else {
-            "\nPreguntame sobre locales, no puedo ayudarte con otras cosas :("
+            "Preguntame sobre locales, no puedo ayudarte con otras cosas :("
         }
     }
 
@@ -57,7 +57,7 @@ object NoctuBot {
         Log.i("MENSAJE", message)
         greetingKeywords.forEach { word ->
             if(message.contains(word, ignoreCase = true) && !addedGreeting){
-                result += "Hello! I am here to help you\n"
+                result += "Buenas!, estoy aqui para ayudarte, comentame ¿qué necesitas?"
                 addedGreeting = true
             }
         }
@@ -70,17 +70,24 @@ object NoctuBot {
                 var index = nombreEmpresas.indexOf(empresa)
                 index -= 1
                 val item = empresas.get(index)
+                if(addedGreeting){
+                    result += "\n\n"
+                }
                 if(!result.contains(empresa, ignoreCase = true)){
                     result += "NOMBRE: ${item.nombre} \nUBICACIÓN: ${item.ubicacion}\n"
                 }
             }
         }
 
+        if(result.isNotEmpty()){
+            result += "\n"
+        }
+
         tagsEmpresa.forEach { tag ->
             Log.i("TAG", tag)
             if(message.contains(tag, ignoreCase = true) && !result.contains(tag)){
                 if(!addedTitle){
-                    result += "\nLas empresas que coinciden con dichas características son:"
+                    result += "Las empresas que coinciden con dichas características son:\n"
                     addedTitle=true
                 }
                 Log.i("TAG", tag)
@@ -94,8 +101,11 @@ object NoctuBot {
         }
 
         byeKeywords.forEach { word ->
-            if(message.contains(word, ignoreCase = true) && !addedBye){
-                result += "\nHa sido un placer ayudarte."
+            if(message.contains(word, ignoreCase = true) && !addedBye && result.isEmpty()){
+                result += "Ha sido un placer ayudarte."
+                addedBye = true
+            } else if(message.contains(word, ignoreCase = true) && !addedBye && !result.isEmpty()){
+                result += "\n\nHa sido un placer ayudarte."
                 addedBye = true
             }
         }
