@@ -67,7 +67,7 @@ fun VistaPerfil(navController: NavController, bottomAppBar: BottomAppBar) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White)
+                    .background(Color.Transparent)
                     .padding(paddingValues)
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,7 +81,7 @@ fun VistaPerfil(navController: NavController, bottomAppBar: BottomAppBar) {
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                        painter = painterResource(id = R.drawable.logo_simple),
                         contentDescription = "Profile Picture",
                         modifier = Modifier.size(110.dp),
                         contentScale = ContentScale.Crop

@@ -20,7 +20,7 @@ data class Empresa(
 
 // Función para llamar al script PHP y obtener las empresas
 fun getEmpresasFromPHP(): Array<Empresa> {
-    val url = URL("http://192.168.1.10/get_empresas.php") // Cambia por la ruta correcta
+    val url = URL("http://192.168.1.148/get_empresas.php") // Cambia por la ruta correcta
     val connection = url.openConnection() as HttpURLConnection
     connection.requestMethod = "GET"
     connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
@@ -44,7 +44,7 @@ fun getEmpresasFromPHP(): Array<Empresa> {
 }
 
 fun getEmpresasByTagsFromPHP(tags: String): Array<Empresa> {
-    val url = URL("http://192.168.1.10/get_empresas_where_tags.php?tags=$tags") // Cambia por la ruta correcta
+    val url = URL("http://192.168.1.148/get_empresas_where_tags.php?tags=$tags") // Cambia por la ruta correcta
     val connection = url.openConnection() as HttpURLConnection
     connection.requestMethod = "GET"
 
