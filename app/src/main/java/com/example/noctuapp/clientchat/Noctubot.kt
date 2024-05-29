@@ -44,11 +44,12 @@ object NoctuBot {
         return if (nombreEmpresas.any{ message.contains(it, ignoreCase = true)} || tagsEmpresa.any{ message.contains(it, ignoreCase = true)}) {
             generateMessage(nombreEmpresas = nombreEmpresas, message = message, empresas = empresas, tagsEmpresa = tagsEmpresa)
         } else {
-            "Preguntame sobre locales, no puedo ayudarte con otras cosas :("
+            "\nPreguntame sobre locales, no puedo ayudarte con otras cosas :("
         }
     }
 
     fun generateMessage(nombreEmpresas: MutableList<String>, message: String, empresas: Array<Empresa>, tagsEmpresa: MutableList<String>): String {
+        var addedTitle=false
         var result = String()
         Log.i("MENSAJE", message)
         nombreEmpresas.forEach { empresa ->
@@ -60,18 +61,21 @@ object NoctuBot {
                 index -= 1
                 val item = empresas.get(index)
                 if(!result.contains(empresa, ignoreCase = true)){
-                    result += "NOMBRE: ${item.nombre} \nUBICACIÓN: ${item.ubicacion}"
+                    result += "NOMBRE: ${item.nombre} \nUBICACIÓN: ${item.ubicacion}\n"
                 }
             }
         }
 
         tagsEmpresa.forEach { tag ->
+
             Log.i("TAG", tag)
             if(message.contains(tag, ignoreCase = true) && !result.contains(tag)){
+                if(!addedTitle){
+                    result += "\nLas empresas que coinciden con dichas características son:"
+                    addedTitle=true
+                }
                 Log.i("TAG", tag)
                 Log.i("INDEX", tagsEmpresa.indexOf(tag).toString())
-                result += "Las empresas que coinciden con dichas características son:"
-
                 empresas.forEach { empresa ->
                     if(empresa.tags.contains(tag,ignoreCase = true) && !result.contains(empresa.nombre,ignoreCase = true)){
                         result += "\n${empresa.nombre}"
