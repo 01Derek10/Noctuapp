@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.navegation.selectNavegation
+import com.example.noctuapp.Empresa
 import com.example.noctuapp.elements.BottomAppBar
 import com.example.noctuapp.ui.theme.NoctuappTheme
 import com.example.noctuapp.ui.theme.noctuapp
@@ -43,16 +44,14 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 data class Ofertas(
-    val id: Int,
-    val idEmpresa: Int,
+    val nombreEmpresa: String,
     val descripcion: String,
-    val enlace: String,
-    val nombre: String
+    val enlace: String
 )
 
 class OfertaRepository {
     suspend fun getofertas(): List<Ofertas> {
-        val url = URL("http://192.168.1.148/ofertas.php")
+        val url = URL("http://192.168.251.190/ofertas.php")
         val connection = withContext(Dispatchers.IO) { url.openConnection() as HttpURLConnection }
         connection.requestMethod = "GET"
 
@@ -63,12 +62,9 @@ class OfertaRepository {
             for (i in 0 until jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(i)
                 val place = Ofertas(
-                    id = jsonObject.getInt("id"),
-                    idEmpresa = jsonObject.getInt("idEmpresa"),
+                    nombreEmpresa = jsonObject.getString("nombre"),
                     descripcion = jsonObject.getString("descripcion"),
                     enlace = jsonObject.getString("enlace"),
-                    nombre = jsonObject.getString("nombre"),
-
                 )
                 lista.add(place)
             }
@@ -107,7 +103,7 @@ fun VistaOfertas(navController: NavController, bottomAppBar: BottomAppBar, ofert
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    Text(text = oferta.nombre, style = MaterialTheme.typography.headlineLarge)
+                    Text(text = oferta.nombreEmpresa, style = MaterialTheme.typography.headlineLarge)
                     Text(text = "Información: ${oferta.descripcion}", style = MaterialTheme.typography.bodyMedium)
                     if(expanded){
                         IconButton(onClick = {
