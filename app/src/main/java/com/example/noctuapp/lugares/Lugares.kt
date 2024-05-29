@@ -51,7 +51,7 @@ data class PartyPlace(
     val ubicacion: String,
     val map: String,
     val tags: String,
-    val Descripción: String
+    val descripcion: String
 )
 
 // Repositorio para gestionar los datos
@@ -73,7 +73,7 @@ class LugaresRepository {
                     ubicacion = jsonObject.getString("ubicacion"),
                     map = jsonObject.getString("map"),
                     tags = jsonObject.getString("tags"),
-                    Descripción = jsonObject.getString("Descripción")
+                    descripcion = jsonObject.getString("descripcion")
                 )
                 places.add(place)
             }
@@ -127,7 +127,7 @@ fun PlaceItem(place: PartyPlace) {
 
                 Text(text = "Estilo: ${place.tags}", style = MaterialTheme.typography.bodyMedium)
                 Text(
-                    text = "Descripción: ${place.Descripción}",
+                    text = "Descripción: ${place.descripcion}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 IconButton(onClick = {
