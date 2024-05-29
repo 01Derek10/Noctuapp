@@ -2,12 +2,16 @@ package com.example.noctuapp.elements
 
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.LocalOffer
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.VoiceChat
+import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.VoiceChat
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
@@ -33,8 +37,8 @@ class BottomAppBar {
             ),
             MainActivity.BottomNavigationItem(
                 title = "Chat",
-                selectedIcon = Icons.Filled.LocalOffer,
-                unselectedIcon = Icons.Outlined.LocalOffer,
+                selectedIcon = Icons.Filled.Chat,
+                unselectedIcon = Icons.Outlined.Chat,
                 route = selectNavegation.Chat.route
             ),
             MainActivity.BottomNavigationItem(
