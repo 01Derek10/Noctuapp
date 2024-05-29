@@ -13,8 +13,10 @@ data class Empresa(
     val id: Int,
     val nombre: String,
     val ubicacion: String,
+    val map: String,
     val tags: String,
-    val ofertas: Int
+    val ofertas: Int,
+    val descripcion: String
      // Nueva propiedad añadida
 )
 
@@ -67,7 +69,7 @@ fun getEmpresasByTagsFromPHP(tags: String): Array<Empresa> {
 }
 
 fun getEmpresasByNombresFromPHP(nombres: Array<String>): Array<Empresa> {
-    val url = URL("http://192.168.1.10/get_empresas_by_nombres.php") // Cambia por la ruta correcta
+    val url = URL("http://192.168.1.148/get_empresas_by_nombres.php") // Cambia por la ruta correcta
     val connection = url.openConnection() as HttpURLConnection
     connection.requestMethod = "POST"
     connection.doOutput = true
