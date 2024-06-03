@@ -7,33 +7,27 @@ $dbname = "noctua";
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Comprobar conexión
+// Verificar conexión
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Consultar la base de datos
+$sql = "SELECT id, nombre, ubicacion, map, tags, descripcion FROM empresas";
+$result = $conn->query($sql);
 
-// Preparar y ejecutar la consulta
-$stmt = $conn->prepare("SELECT empresas.nombre, ofertas.descripcion, ofertas.enlace FROM ofertas left join empresas on idEmpresa = empresas.id");
+$lugares = array();
 
-$stmt->execute();
-$result = $stmt->get_result();
-
-$ofertas = array();
-
-// Verificar resultados
 if ($result->num_rows > 0) {
+    // Salida de datos de cada fila
     while($row = $result->fetch_assoc()) {
-        $ofertas[] = $row;
+        $lugares[] = $row;
     }
 } else {
-    echo "0 result";
+    echo "0 results";
 }
-
-// Cerrar conexión
-$stmt->close();
 $conn->close();
 
 header('Content-Type: application/json');
-echo json_encode($ofertas);
+echo json_encode($lugares);
 ?>

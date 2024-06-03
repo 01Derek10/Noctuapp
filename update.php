@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "android";
+$dbname = "noctua";
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -15,10 +15,13 @@ if ($conn->connect_error) {
 // Obtener valores de POST
 $username = $_POST['username'];
 $email = $_POST['email'];
+$age = $_POST['age'];
+$lastName = $_POST['lastName'];
+$description = $_POST['description'];
 
 // Preparar y ejecutar la consulta de actualización
-$stmt = $conn->prepare("UPDATE users SET email = ? WHERE username = ?");
-$stmt->bind_param("ssss", $email, $age, $description, $username);
+$stmt = $conn->prepare("UPDATE users SET email = ?, edad = ?, apellidos = ?, descripcion = ? WHERE username = ?");
+$stmt->bind_param("sisss", $email, $age, $lastName, $description, $username);
 $success = $stmt->execute();
 
 // Verificar resultados
