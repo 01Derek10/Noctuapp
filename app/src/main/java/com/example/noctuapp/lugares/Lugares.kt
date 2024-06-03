@@ -2,7 +2,11 @@ package com.example.noctuapp.lugares
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +32,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +51,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.io.encoding.Base64
+import kotlin.math.exp
 
 // Modelo de datos
 data class PartyPlace(
@@ -51,29 +61,36 @@ data class PartyPlace(
     val ubicacion: String,
     val map: String,
     val tags: String,
-    val descripcion: String
+    val descripcion: String,
+    val imagen: ByteArray
 )
 
 // Repositorio para gestionar los datos
 class LugaresRepository {
     suspend fun getLugares(): List<PartyPlace> {
-        val url = URL("http://192.168.251.190/lugares.php")
+        val url = URL("http://192.168.1.60/get_empresas.php")
         val connection = withContext(Dispatchers.IO) { url.openConnection() as HttpURLConnection }
         connection.requestMethod = "GET"
 
         return withContext(Dispatchers.IO) {
             val response = connection.inputStream.bufferedReader().use { it.readText() }
+            Log.d("LugaresRepository", "Response: $response")
             val jsonArray = JSONArray(response)
+
             val places = mutableListOf<PartyPlace>()
             for (i in 0 until jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(i)
+                val imageString = jsonObject.optString("imagen",null)
                 val place = PartyPlace(
                     id = jsonObject.getInt("id"),
                     nombre = jsonObject.getString("nombre"),
                     ubicacion = jsonObject.getString("ubicacion"),
                     map = jsonObject.getString("map"),
                     tags = jsonObject.getString("tags"),
-                    descripcion = jsonObject.getString("descripcion")
+                    descripcion = jsonObject.getString("descripcion"),
+                    imagen =
+                        java.util.Base64.getDecoder().decode(imageString)
+
                 )
                 places.add(place)
             }
@@ -114,31 +131,64 @@ fun PlaceItem(place: PartyPlace) {
         colors = CardDefaults.cardColors(containerColor = noctuapp),
         shape = RoundedCornerShape(corner = CornerSize(16.dp))
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-            Spacer(modifier = Modifier.size(10.dp))
-
-            Text(text = place.nombre, style = MaterialTheme.typography.headlineLarge)
-            Text(
-                text = "Ubicación: ${place.ubicacion}",
-                style = MaterialTheme.typography.bodyMedium
-            )
-            if (expanded) {
+        Row{
+            val bitmap = place.imagen?.let { BitmapFactory.decodeByteArray(place.imagen, 0, it.size) }
+            if(!expanded){
+                if (bitmap != null) {
+                    Image(painter = BitmapPainter(bitmap.asImageBitmap()),
+                        contentDescription =null,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(84.dp)
+                            .clip(RoundedCornerShape(corner = CornerSize(16.dp)))
+                    )
+                }
+            }
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .align(Alignment.CenterVertically))
+            {
                 Spacer(modifier = Modifier.size(10.dp))
+                if (expanded) {
+                    if (bitmap != null) {
+                        Image(painter = BitmapPainter(bitmap.asImageBitmap()),
+                            contentDescription =null,
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .size(200.dp)
+                                .clip(RoundedCornerShape(corner = CornerSize(16.dp)))
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
+                }
 
-                Text(text = "Estilo: ${place.tags}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = place.nombre, style = MaterialTheme.typography.headlineLarge)
                 Text(
-                    text = "Descripción: ${place.descripcion}",
+                    text = "Ubicación: ${place.ubicacion}",
                     style = MaterialTheme.typography.bodyMedium
                 )
-                IconButton(onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(place.map))
-                    context.startActivity(intent)
-                }) {
-                    Row {
-                        Icon(imageVector = Icons.Default.LocationOn, contentDescription = null)
+                if (expanded) {
+                    Spacer(modifier = Modifier.size(10.dp))
+
+                    Text(text = "Estilo: ${place.tags}", style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = "Descripción: ${place.descripcion}",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    IconButton(onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(place.map))
+                        context.startActivity(intent)
+                    }) {
+                        Row {
+                            Icon(imageVector = Icons.Default.LocationOn, contentDescription = null)
+                        }
                     }
                 }
             }
         }
     }
+
+
+
 }
