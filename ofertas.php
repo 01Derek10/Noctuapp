@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 
 
 // Preparar y ejecutar la consulta
-$stmt = $conn->prepare("SELECT empresas.nombre, ofertas.descripcion, ofertas.enlace FROM ofertas left join empresas on idEmpresa = empresas.id");
+$stmt = $conn->prepare("SELECT ofertas.id, empresas.nombre, ofertas.descripcion, ofertas.enlace FROM ofertas join empresas on idEmpresa = empresas.id");
 
 $stmt->execute();
 $result = $stmt->get_result();
