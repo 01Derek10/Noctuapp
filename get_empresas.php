@@ -24,7 +24,6 @@ $empresasArray = array();
 if ($result->num_rows > 0) {
     // Obtener los datos de cada fila
     while($row = $result->fetch_assoc()) {
-        $row['imagen'] = base64_encode($row['imagen']);
         $empresasArray[] = $row;
     }
 } else {
