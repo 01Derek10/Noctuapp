@@ -51,7 +51,7 @@ data class Ofertas(
 
 class OfertaRepository {
     suspend fun getofertas(): List<Ofertas> {
-        val url = URL("http://192.168.251.190/ofertas.php")
+        val url = URL("http://192.168.1.60/ofertas.php")
         val connection = withContext(Dispatchers.IO) { url.openConnection() as HttpURLConnection }
         connection.requestMethod = "GET"
 

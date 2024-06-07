@@ -101,7 +101,7 @@ fun VistaLogin(navController: NavController) {
     suspend fun checkCredentials(username: String, password: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
-                val url = URL("http://192.168.251.190/login.php")
+                val url = URL("http://192.168.1.60/login.php")
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "POST"
                 connection.doOutput = true
