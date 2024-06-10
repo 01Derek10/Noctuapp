@@ -1,12 +1,9 @@
 package com.example.noctuapp.chatbot
 
-import android.content.Context
-import android.graphics.PixelFormat
-import android.os.AsyncTask
-import android.view.WindowManager
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,18 +12,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStream
-import java.net.HttpURLConnection
-import java.net.URL
+import androidx.navigation.NavController
+import com.example.noctuapp.lugares.LugaresFilteredByMusic
+import com.example.noctuapp.lugares.LugaresRepository
+import com.example.noctuapp.lugares.PartyPlace
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
-fun FloatingChatbotDialog(onDismiss: () -> Unit) {
+fun FloatingChatbotDialog(
+    onDismiss: () -> Unit,
+    lugaresRepository: LugaresRepository,
+    navController: NavController
+) {
     var selectedMusic by remember { mutableStateOf<String?>(null) }
-    var selectedAttendance by remember { mutableStateOf<String?>(null) }
     var response by remember { mutableStateOf("Elige las opciones que quieras") }
 
     AlertDialog(
@@ -41,35 +41,27 @@ fun FloatingChatbotDialog(onDismiss: () -> Unit) {
                     style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
-                MusicButton("Reggaeton", selectedMusic) { selectedMusic = it }
-                MusicButton("Salsa", selectedMusic) { selectedMusic = it }
-                MusicButton("Flamenco", selectedMusic) { selectedMusic = it }
-
-                Text(
-                    text = "Concurrencia:",
-                    style = MaterialTheme.typography.titleSmall,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-                AttendanceButton("Baja", selectedAttendance) { selectedAttendance = it }
-                AttendanceButton("Media", selectedAttendance) { selectedAttendance = it }
-                AttendanceButton("Alta", selectedAttendance) { selectedAttendance = it }
+                Row(Modifier.horizontalScroll(rememberScrollState())) {
+                    MusicButton("Reggaeton", selectedMusic) { selectedMusic = it }
+                    MusicButton("Trap", selectedMusic) { selectedMusic = it }
+                    MusicButton("Pop", selectedMusic) { selectedMusic = it }
+                    MusicButton("Jazz", selectedMusic) { selectedMusic = it }
+                    MusicButton("Rock", selectedMusic) { selectedMusic = it }
+                    MusicButton("Blues", selectedMusic) { selectedMusic = it }
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Button(
-                    onClick = {
-                        if (selectedMusic != null || selectedAttendance != null) {
-                            // Aquí debes hacer la llamada a tu API
-                            response = "Lugares recomendados:..."
-                        } else {
-                            response = "Por favor selecciona alguna opción"
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Buscar")
-                }
                 Text(response)
+
+                // Mostrar los lugares filtrados
+                selectedMusic?.let { music ->
+                    LugaresFilteredByMusic(
+                        lugaresRepository = lugaresRepository,
+                        selectedMusic = music,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         },
         confirmButton = {
@@ -77,8 +69,11 @@ fun FloatingChatbotDialog(onDismiss: () -> Unit) {
                 Text("Cerrar")
             }
         }
+
     )
 }
+
+
 
 @Composable
 fun MusicButton(text: String, selected: String?, onSelect: (String) -> Unit) {
@@ -94,16 +89,3 @@ fun MusicButton(text: String, selected: String?, onSelect: (String) -> Unit) {
     }
 }
 
-@Composable
-fun AttendanceButton(text: String, selected: String?, onSelect: (String) -> Unit) {
-    Button(
-        onClick = { onSelect(text) },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected == text) Color.Blue else Color.LightGray,
-            contentColor = Color.White
-        ),
-        modifier = Modifier.padding(2.dp)
-    ) {
-        Text(text, color = Color.White)
-    }
-}

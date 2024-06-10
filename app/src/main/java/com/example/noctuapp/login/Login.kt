@@ -42,6 +42,9 @@ import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
+
+
+var userCorrect = ""
 @Composable
 fun VistaLogin(navController: NavController) {
     val username = rememberSaveable { mutableStateOf("") }
@@ -232,6 +235,7 @@ fun VistaLogin(navController: NavController) {
                                 showProgressDialog = false
                                 if (success) {
                                     navController.navigate(route = selectNavegation.Lugares.route)
+                                    userCorrect = username.value
                                 } else {
                                     datosError = true
                                 }
