@@ -99,6 +99,12 @@ class LugaresRepository {
             places
         }
     }
+    suspend fun getLugaresByMusic(music: String): List<PartyPlace> {
+        val allPlaces = getLugares()
+        return allPlaces.filter { place ->
+            place.tags.contains(music, ignoreCase = true)
+        }
+    }
 }
 
 @Composable
@@ -119,6 +125,28 @@ fun VistaLugares(navController: NavController, bottomAppBar: BottomAppBar, lugar
         }
     }
 }
+@Composable
+fun LugaresFilteredByMusic(
+    lugaresRepository: LugaresRepository,
+    selectedMusic: String?,
+    modifier: Modifier = Modifier
+) {
+    val placesM = remember { mutableStateOf<List<PartyPlace>>(emptyList()) }
+
+    LaunchedEffect(selectedMusic) {
+        if (selectedMusic != null) {
+            val filteredPlaces = lugaresRepository.getLugaresByMusic(selectedMusic)
+            placesM.value = filteredPlaces
+        }
+    }
+
+    LazyColumn(modifier = modifier) {
+        items(items = placesM.value) { place ->
+            PlaceItem(place = place)
+        }
+    }
+}
+
 
 @Composable
 fun PlaceItem(place: PartyPlace) {
@@ -143,6 +171,7 @@ fun PlaceItem(place: PartyPlace) {
                             .padding(8.dp)
                             .size(84.dp)
                             .clip(RoundedCornerShape(corner = CornerSize(16.dp)))
+                            .align(Alignment.CenterVertically)
                     )
                 }
             }

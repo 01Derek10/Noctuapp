@@ -23,8 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.R
 import com.example.noctuapp.elements.BottomAppBar
+import com.example.noctuapp.login.userCorrect
 import com.example.noctuapp.ui.theme.NoctuappTheme
 import com.example.noctuapp.ui.theme.noctuapp
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +51,8 @@ fun VistaPerfil(navController: NavController, bottomAppBar: BottomAppBar) {
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
-            val userData = getUserData("noctuapp") // Replace "username" with the actual username
+            val userData = getUserData(userCorrect) // Replace "username" with the actual username
+            Log.d("username", "User Data: $userCorrect")
             if (userData != null) {
                 name.value = userData.username
                 lastName.value = userData.lastName
@@ -235,7 +238,7 @@ fun VistaPerfil(navController: NavController, bottomAppBar: BottomAppBar) {
 suspend fun updateUserData(username: String, email: String, description: String, age: String, lastName: String): Boolean {
     return withContext(Dispatchers.IO) {
         try {
-            val url = URL("http://192.168.251.190/update.php") // Cambia esto a la URL de tu servidor
+            val url = URL("http://192.168.1.60/update.php") // Cambia esto a la URL de tu servidor
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.doOutput = true
@@ -262,7 +265,7 @@ suspend fun updateUserData(username: String, email: String, description: String,
 suspend fun getUserData(username: String): UserData? {
     return withContext(Dispatchers.IO) {
         try {
-            val url = URL("http://192.168.251.190/get_user.php") // Cambia esto a la URL de tu servidor
+            val url = URL("http://192.168.1.60/get_user.php") // Cambia esto a la URL de tu servidor
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.doOutput = true

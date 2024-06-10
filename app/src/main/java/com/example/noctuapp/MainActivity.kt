@@ -17,6 +17,7 @@ import com.example.noctuapp.chatbot.FloatingChatbotDialog
 import com.example.myapplication.navegation.selectNavegation
 import com.example.noctuapp.elements.BottomAppBar
 import com.example.noctuapp.elements.FloatingActionButton
+import com.example.noctuapp.lugares.LugaresRepository
 import com.example.noctuapp.navigation.NavigationApp
 import com.example.noctuapp.ui.theme.NoctuappTheme
 
@@ -39,6 +40,8 @@ class MainActivity : ComponentActivity() {
                 var showDialog by remember { mutableStateOf(false) }
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
+                val lugaresRepository = LugaresRepository()
+
 
                 Scaffold(
                     bottomBar = {
@@ -67,7 +70,7 @@ class MainActivity : ComponentActivity() {
                     floatingActionButtonPosition = FabPosition.End,
                     content = { paddingValues ->
                         if (showDialog) {
-                            FloatingChatbotDialog(onDismiss = { showDialog = false })
+                            FloatingChatbotDialog(onDismiss = { showDialog = false }, lugaresRepository = lugaresRepository, navController = navController)
                         }
                         NavigationApp(
                             ruta = selectNavegation.Login.route,
