@@ -58,11 +58,11 @@ fun FloatingChatbotDialog(onDismiss: () -> Unit) {
 
                 Button(
                     onClick = {
-                        if (selectedMusic != null && selectedAttendance != null) {
+                        if (selectedMusic != null || selectedAttendance != null) {
                             // Aquí debes hacer la llamada a tu API
                             response = "Lugares recomendados:..."
                         } else {
-                            response = "Por favor selecciona ambas opciones"
+                            response = "Por favor selecciona alguna opción"
                         }
                     },
                     modifier = Modifier.fillMaxWidth()

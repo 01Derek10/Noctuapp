@@ -74,7 +74,7 @@ object NoctuBot {
                     result += "\n\n"
                 }
                 if(!result.contains(empresa, ignoreCase = true)){
-                    result += "NOMBRE: ${item.nombre} \nUBICACIÓN: ${item.ubicacion}\n"
+                    result += "NOMBRE: ${item.nombre} \nUBICACIÓN: ${item.ubicacion}\nMAPS: ${item.map}\n"
                 }
             }
         }
@@ -109,7 +109,9 @@ object NoctuBot {
                 addedBye = true
             }
         }
-
+        addedTitle = false
+        addedGreeting = false
+        addedBye = false
         return result
     }
 
