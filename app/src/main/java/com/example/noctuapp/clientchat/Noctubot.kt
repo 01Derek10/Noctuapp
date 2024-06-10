@@ -74,7 +74,7 @@ object NoctuBot {
                     result += "\n\n"
                 }
                 if(!result.contains(empresa, ignoreCase = true)){
-                    result += "NOMBRE: ${item.nombre} \nUBICACIÓN: ${item.ubicacion}\n"
+                    result += "NOMBRE: ${item.nombre} \nUBICACIÓN: ${item.ubicacion}"
                 }
             }
         }
@@ -109,7 +109,12 @@ object NoctuBot {
                 addedBye = true
             }
         }
-
+        if(result.isEmpty()){
+            result = "Preguntame sobre locales, no puedo ayudarte con otras cosas :("
+        }
+        addedTitle = false
+        addedGreeting = false
+        addedBye = false
         return result
     }
 

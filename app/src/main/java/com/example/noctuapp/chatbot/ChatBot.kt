@@ -42,7 +42,7 @@ fun FloatingChatbotDialog(
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
                 Row(Modifier.horizontalScroll(rememberScrollState())) {
-                    MusicButton("Reggaeton", selectedMusic) { selectedMusic = it }
+                    MusicButton("Reggeton", selectedMusic) { selectedMusic = it }
                     MusicButton("Trap", selectedMusic) { selectedMusic = it }
                     MusicButton("Pop", selectedMusic) { selectedMusic = it }
                     MusicButton("Jazz", selectedMusic) { selectedMusic = it }
